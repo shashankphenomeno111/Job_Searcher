@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Aggregator - Find Your Dream Job</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-icon">💼</div>
+                <h1 class="logo-text">Job<span>Aggregator</span></h1>
+            </div>
+            <p class="tagline">Search thousands of jobs from multiple platforms in one place</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input"
+                        placeholder="Enter job title, e.g., Java Developer, Data Scientist..." value="Java Developer">
+                </div>
+
+                <div class="location-input-wrapper">
+                    <span class="location-icon">📍</span>
+                    <input type="text" id="locationInput" class="search-input"
+                        placeholder="Location (e.g., India, Bangalore, Mumbai)" value="India">
+                </div>
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="timeFilter">📅 Posted Within</label>
+                        <select id="timeFilter" class="filter-select">
+                            <option value="1">Last 24 hours</option>
+                            <option value="7" selected>Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="365">All time</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="experienceFilter">👔 Experience Level</label>
+                        <select id="experienceFilter" class="filter-select">
+                            <option value="all" selected>All Levels</option>
+                            <option value="fresher">Fresher/Entry Level</option>
+                            <option value="experienced">Experienced</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="sortBy">🔄 Sort By</label>
+                        <select id="sortBy" class="filter-select">
+                            <option value="date">Date Posted</option>
+                            <option value="title">Job Title</option>
+                            <option value="company">Company</option>
+                            <option value="source">Source</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="platforms-section">
+                    <label class="platforms-label">🌐 Select Platforms to Search:</label>
+                    <div class="platforms-grid">
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="indeed" checked>
+                            <span>Indeed</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="linkedin" checked>
+                            <span>LinkedIn</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="glassdoor" checked>
+                            <span>Glassdoor</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="naukri" checked>
+                            <span>Naukri</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="monster" checked>
+                            <span>Monster</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="simplyhired" checked>
+                            <span>SimplyHired</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="angellist" checked>
+                            <span>AngelList</span>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platform" value="internshala" checked>
+                            <span>Internshala</span>
+                        </label>
+                    </div>
+                    <div class="platform-actions">
+                        <button type="button" id="selectAllPlatforms" class="platform-action-btn">Select All</button>
+                        <button type="button" id="deselectAllPlatforms" class="platform-action-btn">Deselect
+                            All</button>
+                    </div>
+                </div>
+
+                <button id="searchBtn" class="search-btn">
+                    <span class="btn-text">Search Jobs</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="statsSection" class="stats-section" style="display: none;">
+            <div class="stat-card">
+                <div class="stat-value" id="totalJobs">0</div>
+                <div class="stat-label">Total Jobs Found</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSources">0</div>
+                <div class="stat-label">Sources Searched</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="latestUpdate">-</div>
+                <div class="stat-label">Latest Update</div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Searching across multiple job platforms...</p>
+            <div class="loading-sources">
+                <span class="source-badge">Indeed</span>
+                <span class="source-badge">LinkedIn</span>
+                <span class="source-badge">Glassdoor</span>
+                <span class="source-badge">Naukri</span>
+                <span class="source-badge">Monster</span>
+                <span class="source-badge">SimplyHired</span>
+                <span class="source-badge">AngelList</span>
+                <span class="source-badge">Internshala</span>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section" style="display: none;">
+            <div class="results-header">
+                <h2 class="results-title">Job Listings</h2>
+                <div class="results-actions">
+                    <button id="exportBtn" class="action-btn">
+                        📥 Export CSV
+                    </button>
+                    <button id="clearBtn" class="action-btn secondary">
+                        🗑️ Clear Results
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultsContainer" class="results-container">
+                <!-- Job cards will be inserted here -->
+            </div>
+
+            <div id="noResults" class="no-results" style="display: none;">
+                <div class="no-results-icon">😕</div>
+                <h3>No jobs found</h3>
+                <p>Try adjusting your search query or filters</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Aggregating jobs from Indeed, LinkedIn, Glassdoor, Naukri, Monster, SimplyHired, AngelList, Internshala,
+                and more</p>
+            <p class="footer-note">Made with ❤️ for job seekers</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>
