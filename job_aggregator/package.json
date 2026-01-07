@@ -1,0 +1,25 @@
+{
+  "name": "job_aggregator",
+  "version": "1.0.0",
+  "description": "A powerful web application that aggregates job listings from multiple job boards and search engines in one place. Search for jobs across Indeed, LinkedIn, Glassdoor, Naukri, and more with advanced filtering capabilities.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "axios": "^1.13.2",
+    "framer-motion": "^12.24.10",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "vite": "^7.3.1"
+  }
+}
